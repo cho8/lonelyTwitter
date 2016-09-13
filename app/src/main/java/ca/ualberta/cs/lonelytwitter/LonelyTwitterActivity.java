@@ -39,6 +39,15 @@ public class LonelyTwitterActivity extends Activity {
 			public void onClick(View v) {
 				setResult(RESULT_OK);
 				String text = bodyText.getText().toString();
+
+				Tweet newTweet = new Tweet(text);
+				try {
+					newTweet.setMessage("This is a tweet");
+				} catch (TweetTooLongException e) {
+					e.printStackTrace();
+				}
+				String test = newTweet.getMessage();
+
 				saveInFile(text, new Date(System.currentTimeMillis()));
 				finish();
 
