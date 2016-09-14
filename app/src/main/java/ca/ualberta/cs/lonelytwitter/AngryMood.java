@@ -9,7 +9,7 @@ public class AngryMood extends Mood {
         super();
     }
 
-    public String printMood() {
+    public String returnMoodString() {
         return "Angry";
     }
 }

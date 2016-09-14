@@ -16,7 +16,7 @@ public abstract class Mood {
         this.date = date;
     }
 
-    public abstract String printMood();
+    public abstract String returnMoodString();
 
     public Date getDate() {
         return date;
