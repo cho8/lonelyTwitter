@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by cho8 on 2016-09-13.
  */
-public class Tweet {
+public abstract class Tweet {
     private String message;
     private Date date;
 
@@ -18,6 +18,8 @@ public class Tweet {
         this.message = message;
         this.date = date;
     }
+
+    public abstract Boolean isImportant();
 
     public void setMessage(String message) throws TweetTooLongException {
         if (message.length() > 140) {
