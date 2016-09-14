@@ -27,6 +27,10 @@ public abstract class Tweet {
         return this.moodList;
     }
 
+    public void setMoodList(ArrayList<Mood> moodList) {
+        this.moodList = moodList;
+    }
+
     public void setMessage(String message) throws TweetTooLongException {
         if (message.length() > 140) {
             //Do Something
@@ -49,4 +53,7 @@ public abstract class Tweet {
 
         return date;
     }
+
+
+
 }

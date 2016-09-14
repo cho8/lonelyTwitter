@@ -41,8 +41,13 @@ public class LonelyTwitterActivity extends Activity {
 				String text = bodyText.getText().toString();
 
 				Tweet newTweet = new NormalTweet(text);
+				Mood newMood = new AngryMood();
+				ArrayList<Mood> newMoodList = new ArrayList<Mood>();
+				newMoodList.add(newMood);
+
 				try {
 					newTweet.setMessage("This is a tweet");
+					newTweet.setMoodList(newMoodList);
 				} catch (TweetTooLongException e) {
 					e.printStackTrace();
 				}
