@@ -5,13 +5,23 @@ import android.test.ActivityInstrumentationTestCase2;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by cho8 on 2016-09-27.
+ * This class tests the functionality of a tweet list, such as adding a tweet, getting a tweet,
+ * detecting duplicates, and whether the list is sorted.
+ * @author cho8 on 2016-09-27.
+ * @see TweetList
  */
 public class TweetListTest extends ActivityInstrumentationTestCase2<LonelyTwitterActivity> {
+
+    /**
+     * This constructor creates an instance of a test object to test TweetList functionality.
+     */
     public TweetListTest() {
         super(LonelyTwitterActivity.class);
     }
 
+    /**
+     * This method tests the functionality of adding a single tweet to the list.
+     */
     public void testAddTweet() {
         TweetList list = new TweetList();
 
@@ -27,6 +37,9 @@ public class TweetListTest extends ActivityInstrumentationTestCase2<LonelyTwitte
         }
     }
 
+    /**
+     * This method tests the hasTweets functionality of the TweetList
+     */
     public void testHasTweet() {
         TweetList list = new TweetList();
 
@@ -38,6 +51,9 @@ public class TweetListTest extends ActivityInstrumentationTestCase2<LonelyTwitte
         assertTrue(list.hasTweet(tweet));
     }
 
+    /**
+     * This method tests the getting of Tweets at a given position in a list.
+     */
     public void testGetTweet() {
         TweetList list = new TweetList();
 
@@ -62,11 +78,11 @@ public class TweetListTest extends ActivityInstrumentationTestCase2<LonelyTwitte
         } catch (Exception e) {
 
         }
-
-
-
     }
 
+    /**
+     * This method tests the removal a given tweet in the list.
+     */
     public void testRemoveTweet() {
         TweetList list = new TweetList();
 
@@ -79,6 +95,9 @@ public class TweetListTest extends ActivityInstrumentationTestCase2<LonelyTwitte
 
     }
 
+    /**
+     * This method tests the counting of tweets in the list
+     */
     public void testCount() {
         TweetList list = new TweetList();
 
