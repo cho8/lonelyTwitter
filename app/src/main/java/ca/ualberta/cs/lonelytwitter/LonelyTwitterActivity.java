@@ -14,8 +14,10 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,15 +28,20 @@ import com.google.gson.reflect.TypeToken;
 
 public class LonelyTwitterActivity extends Activity {
 
+	private Activity activity = this;
+
 	private static final String FILENAME = "file.sav";
 	private EditText bodyText;
 	private ListView oldTweetsList;
 
 	private ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
-
 	private ArrayAdapter<Tweet> adapter;
 
-	/** Called when the activity is first created. */
+	public ListView getOldTweetsList(){
+		return oldTweetsList;
+	}
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,9 +49,8 @@ public class LonelyTwitterActivity extends Activity {
 
 		bodyText = (EditText) findViewById(R.id.body);
 		Button saveButton = (Button) findViewById(R.id.save);
+		Button clearButton = (Button) findViewById(R.id.clear);
 		oldTweetsList = (ListView) findViewById(R.id.oldTweetsList);
-
-        Button clearButton = (Button) findViewById(R.id.clear);
 
 
 		saveButton.setOnClickListener(new View.OnClickListener() {
@@ -54,24 +60,34 @@ public class LonelyTwitterActivity extends Activity {
 				String text = bodyText.getText().toString();
 
 				Tweet newTweet = new NormalTweet(text);
-
 				tweetList.add(newTweet);
 				adapter.notifyDataSetChanged();
-
 				saveInFile();
 			}
 		});
 
-        clearButton.setOnClickListener(new View.OnClickListener() {
+		clearButton.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View v) {
+			public void onClick(View v) {
+				setResult(RESULT_OK);
+				tweetList.clear();
+				deleteFile(FILENAME);
+				adapter.notifyDataSetChanged();
+			}
+		});
 
-                tweetList.clear();
-                adapter.notifyDataSetChanged();
+		oldTweetsList.setOnItemClickListener(new
+				AdapterView.OnItemClickListener(){
+					public void onItemClick(AdapterView<?> parent, View view,
+											int position ,long id){
+						Intent intent = new Intent(activity, EditTweetActivity.class);
+						intent.putExtra("tweet", oldTweetsList.getItemAtPosition(position).toString());
+						startActivity(intent);
+					}
 
-                saveInFile();
-            }
-        });
+				});
+
+
 	}
 
 	@Override
@@ -84,17 +100,18 @@ public class LonelyTwitterActivity extends Activity {
 		oldTweetsList.setAdapter(adapter);
 	}
 
+
 	private void loadFromFile() {
 		try {
 			FileInputStream fis = openFileInput(FILENAME);
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
+
+
 			Gson gson = new Gson();
-
-			// Code from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
+			//Code taken from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt Sept.22,2016
 			Type listType = new TypeToken<ArrayList<NormalTweet>>(){}.getType();
-
-			tweetList = gson.fromJson(in,listType);
+			tweetList = gson.fromJson(in, listType);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -104,19 +121,17 @@ public class LonelyTwitterActivity extends Activity {
 			throw new RuntimeException();
 		}
 	}
-	
+
+
+
 	private void saveInFile() {
 		try {
-			FileOutputStream fos = openFileOutput(FILENAME,
-					0);
 
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-
+			FileOutputStream fos = openFileOutput(FILENAME,0);
+			OutputStreamWriter writer = new OutputStreamWriter(fos);
 			Gson gson = new Gson();
-			gson.toJson(tweetList, out);
-			out.flush();
-
-			fos.close();
+			gson.toJson(tweetList, writer);
+			writer.flush();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			throw new RuntimeException();
